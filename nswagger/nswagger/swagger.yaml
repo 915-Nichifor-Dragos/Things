@@ -1,0 +1,664 @@
+﻿---
+openapi: 3.0.1
+info:
+  title: nswagger
+  version: '1.0'
+paths:
+  "/api/auth/register":
+    post:
+      tags:
+      - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/RegisterViewModel"
+          text/json:
+            schema:
+              "$ref": "#/components/schemas/RegisterViewModel"
+          application/*+json:
+            schema:
+              "$ref": "#/components/schemas/RegisterViewModel"
+      responses:
+        '200':
+          description: Success
+  "/api/auth/login":
+    post:
+      tags:
+      - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/LoginViewModel"
+          text/json:
+            schema:
+              "$ref": "#/components/schemas/LoginViewModel"
+          application/*+json:
+            schema:
+              "$ref": "#/components/schemas/LoginViewModel"
+      responses:
+        '200':
+          description: Success
+  "/api/auth/logout":
+    post:
+      tags:
+      - Authentication
+      responses:
+        '200':
+          description: Success
+  "/api/auth/activate":
+    post:
+      tags:
+      - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ActivateAccountViewModel"
+          text/json:
+            schema:
+              "$ref": "#/components/schemas/ActivateAccountViewModel"
+          application/*+json:
+            schema:
+              "$ref": "#/components/schemas/ActivateAccountViewModel"
+      responses:
+        '200':
+          description: Success
+  "/api/products":
+    get:
+      tags:
+      - Product
+      responses:
+        '200':
+          description: Success
+    post:
+      tags:
+      - Product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Product"
+          text/json:
+            schema:
+              "$ref": "#/components/schemas/Product"
+          application/*+json:
+            schema:
+              "$ref": "#/components/schemas/Product"
+      responses:
+        '200':
+          description: Success
+  "/api/products/{id}":
+    get:
+      tags:
+      - Product
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+    put:
+      tags:
+      - Product
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Product"
+          text/json:
+            schema:
+              "$ref": "#/components/schemas/Product"
+          application/*+json:
+            schema:
+              "$ref": "#/components/schemas/Product"
+      responses:
+        '200':
+          description: Success
+    delete:
+      tags:
+      - Product
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+components:
+  schemas:
+    ActivateAccountViewModel:
+      required:
+      - activationToken
+      - username
+      type: object
+      properties:
+        activationToken:
+          type: string
+          format: uuid
+        username:
+          type: string
+      additionalProperties: false
+    Cart:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type: string
+          format: date-time
+        isDeleted:
+          type: boolean
+        userId:
+          type: string
+          format: uuid
+        user:
+          "$ref": "#/components/schemas/User"
+        items:
+          type: array
+          items:
+            "$ref": "#/components/schemas/CartItem"
+          nullable: true
+      additionalProperties: false
+    CartItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+          format: int32
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type: string
+          format: date-time
+        isDeleted:
+          type: boolean
+        cartId:
+          type: string
+          format: uuid
+        cart:
+          "$ref": "#/components/schemas/Cart"
+        productId:
+          type: string
+          format: uuid
+        product:
+          "$ref": "#/components/schemas/Product"
+      additionalProperties: false
+    LoginViewModel:
+      required:
+      - password
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      additionalProperties: false
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        total:
+          type: number
+          format: double
+        status:
+          "$ref": "#/components/schemas/OrderStatus"
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type: string
+          format: date-time
+        isDeleted:
+          type: boolean
+        userId:
+          type: string
+          format: uuid
+        user:
+          "$ref": "#/components/schemas/User"
+        orderPaymentDetailsId:
+          type: string
+          format: uuid
+        orderPaymentDetails:
+          "$ref": "#/components/schemas/OrderPaymentDetails"
+        items:
+          type: array
+          items:
+            "$ref": "#/components/schemas/OrderItem"
+          nullable: true
+      additionalProperties: false
+    OrderItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+          format: int32
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type: string
+          format: date-time
+        isDeleted:
+          type: boolean
+        orderId:
+          type: string
+          format: uuid
+        order:
+          "$ref": "#/components/schemas/Order"
+        productId:
+          type: string
+          format: uuid
+        product:
+          "$ref": "#/components/schemas/Product"
+      additionalProperties: false
+    OrderPaymentDetails:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        amount:
+          type: integer
+          format: int32
+        status:
+          "$ref": "#/components/schemas/PaymentStatus"
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type: string
+          format: date-time
+        isDeleted:
+          type: boolean
+        orderId:
+          type: string
+          format: uuid
+        order:
+          "$ref": "#/components/schemas/Order"
+      additionalProperties: false
+    OrderStatus:
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      type: integer
+      format: int32
+    PaymentStatus:
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      type: integer
+      format: int32
+    PaymentType:
+      enum:
+      - 0
+      - 1
+      type: integer
+      format: int32
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        price:
+          type: number
+          format: double
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type: string
+          format: date-time
+        isDeleted:
+          type: boolean
+        productInventoryId:
+          type: string
+          format: uuid
+        inventory:
+          "$ref": "#/components/schemas/ProductInventory"
+        productCategoryId:
+          type: string
+          format: uuid
+        category:
+          "$ref": "#/components/schemas/ProductCategory"
+        productDiscountId:
+          type: string
+          format: uuid
+        discount:
+          "$ref": "#/components/schemas/ProductDiscount"
+        orderedItems:
+          type: array
+          items:
+            "$ref": "#/components/schemas/OrderItem"
+          nullable: true
+        cartItems:
+          type: array
+          items:
+            "$ref": "#/components/schemas/CartItem"
+          nullable: true
+      additionalProperties: false
+    ProductCategories:
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      type: integer
+      format: int32
+    ProductCategory:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        category:
+          "$ref": "#/components/schemas/ProductCategories"
+        description:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type: string
+          format: date-time
+        isDeleted:
+          type: boolean
+        products:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Product"
+          nullable: true
+      additionalProperties: false
+    ProductDiscount:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        discountPercent:
+          type: number
+          format: double
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type: string
+          format: date-time
+        isDeleted:
+          type: boolean
+        products:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Product"
+          nullable: true
+      additionalProperties: false
+    ProductInventory:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+          format: int32
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type: string
+          format: date-time
+        isDeleted:
+          type: boolean
+        productId:
+          type: string
+          format: uuid
+        product:
+          "$ref": "#/components/schemas/Product"
+      additionalProperties: false
+    RegisterViewModel:
+      required:
+      - email
+      - password
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        birthDate:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    Role:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          "$ref": "#/components/schemas/Roles"
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type: string
+          format: date-time
+        isDeleted:
+          type: boolean
+      additionalProperties: false
+    Roles:
+      enum:
+      - 0
+      - 1
+      - 2
+      type: integer
+      format: int32
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        username:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        phoneNumber:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        birthDate:
+          type: string
+          format: date-time
+          nullable: true
+        emailToken:
+          type: string
+          format: uuid
+        emailTokenGenerationTime:
+          type: string
+          format: date-time
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type: string
+          format: date-time
+        isDeleted:
+          type: boolean
+        roleId:
+          type: string
+          format: uuid
+        role:
+          "$ref": "#/components/schemas/Role"
+        cartId:
+          type: string
+          format: uuid
+        cart:
+          "$ref": "#/components/schemas/Cart"
+        addresses:
+          type: array
+          items:
+            "$ref": "#/components/schemas/UserAddress"
+          nullable: true
+        paymentMethods:
+          type: array
+          items:
+            "$ref": "#/components/schemas/UserPayment"
+          nullable: true
+      additionalProperties: false
+    UserAddress:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        country:
+          type: string
+          nullable: true
+        region:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        address:
+          type: string
+          nullable: true
+        postalCode:
+          type: string
+          nullable: true
+        phoneNumber:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type: string
+          format: date-time
+        isDeleted:
+          type: boolean
+        userId:
+          type: string
+          format: uuid
+        user:
+          "$ref": "#/components/schemas/User"
+      additionalProperties: false
+    UserPayment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        paymentType:
+          "$ref": "#/components/schemas/PaymentType"
+        provider:
+          type: string
+          nullable: true
+        accountNumber:
+          type: string
+          nullable: true
+        expirationDate:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type: string
+          format: date-time
+        isDeleted:
+          type: boolean
+        userId:
+          type: string
+          format: uuid
+        user:
+          "$ref": "#/components/schemas/User"
+      additionalProperties: false
